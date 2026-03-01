@@ -25,11 +25,13 @@ def get_config():
     
     llm_config = config_data.get("llm", {})
     scraper_config = config_data.get("scraper", {})
+    prediction_config = config_data.get("prediction", {})
     
     api_key = llm_config.get("api_key")
     base_url = llm_config.get("base_url", "https://api.openai.com/v1")
     model = llm_config.get("model", "gpt-3.5-turbo")
     history_count = scraper_config.get("history_count", 30)
+    prediction_count = prediction_config.get("count", 1)
     
     if not api_key or api_key == "your_api_key_here":
         print("错误：未设置 API Key。请在 config.json 文件中配置您的 llm.api_key。")
@@ -39,7 +41,8 @@ def get_config():
         "api_key": api_key,
         "base_url": base_url,
         "model": model,
-        "history_count": int(history_count)
+        "history_count": int(history_count),
+        "prediction_count": int(prediction_count)
     }
 
 def format_history_data(history):
@@ -63,7 +66,6 @@ def main():
     
     history_text = format_history_data(history)
     print(f"历史数据是: \n{history_text}")
-    
     prompt = f"""
 你是一个专业的彩票分析师。以下是最近 {len(history)} 期的双色球开奖结果（时间倒序排列）：
 
@@ -72,7 +74,8 @@ def main():
 请根据这些历史数据，分析红球和蓝球的走势（如冷热号、遗漏值、连号等），预测下一期的开奖号码。
 双色球规则：红球从01-33中选6个，蓝球从01-16中选1个。
 
-请直接输出一组你认为最有可能中奖的号码，格式如下：
+请直接输出 {config['prediction_count']} 组你认为最有可能中奖的号码，每组格式如下：
+第 N 组：
 红球：XX, XX, XX, XX, XX, XX
 蓝球：XX
 

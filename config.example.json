@@ -4,6 +4,9 @@
         "base_url": "https://api.openai.com/v1",
         "model": "gpt-3.5-turbo"
     },
+    "prediction": {
+        "count": 1
+    },
     "scraper": {
         "history_count": 30
     }
