@@ -1,0 +1,15 @@
+# Configuration
+config.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv
+venv/
+ENV/
+env/
+
+# Data
+*.csv
+*.log
