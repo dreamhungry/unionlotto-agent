@@ -4,11 +4,12 @@ AI-powered Union Lotto predictor with LLM analysis.
 
 这是一个简单的双色球数据抓取和预测工具，它会自动抓取中彩网的历史开奖数据，并使用 OpenAI 兼容的 LLM API 进行分析和预测。
 
-## 功能
+## Features
 
-1.  **自动抓取数据**: 从中彩网抓取最近 N 期的双色球开奖结果。
-2.  **LLM 分析**: 将历史数据发送给 LLM，让其分析走势并预测下一期号码。
-3.  **高度可配置**: 支持自定义 API Key、模型、API 地址以及抓取的历史期数。
+1.  **Auto Scraping**: Scrape recent N draws of Union Lotto results from zhcw.com.
+2.  **Multi-Model Prediction**: Use multiple LLM models to predict independently, then a judge model selects the best result.
+3.  **Single-Model Fallback**: If `predict_models` is not configured, falls back to direct prediction by the judge model.
+4.  **Highly Configurable**: Custom API Key, models, API base URL, history count, and prediction count.
 
 ## 使用方法
 
@@ -36,13 +37,22 @@ AI-powered Union Lotto predictor with LLM analysis.
       "llm": {
         "api_key": "sk-xxxxxxxxxxxxxxxxxxxxxxxx",
         "base_url": "https://api.openai.com/v1",
-        "model": "gpt-3.5-turbo"
+        "judge_model": "gpt-4o",
+        "predict_models": ["gpt-4o-mini", "deepseek-chat", "claude-3-haiku-20240307"]
+      },
+      "prediction": {
+        "count": 1
       },
       "scraper": {
         "history_count": 30
       }
     }
     ```
+
+    **Configuration details:**
+    - `llm.judge_model`: The model used for final judgment (required).
+    - `llm.predict_models`: List of models for independent predictions (optional). If omitted or empty, the judge model directly predicts from history data.
+    - `prediction.count`: Number of prediction groups to output.
 
 3.  **运行程序**:
     ```bash
