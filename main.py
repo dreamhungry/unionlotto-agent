@@ -108,14 +108,21 @@ def build_judge_prompt(history_text, history_count, predictions, prediction_coun
 
 def call_llm(client, model, system_prompt, user_prompt):
     """Call LLM API with the given model and prompts."""
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
+    # Models that only support default temperature (1)
+    no_temperature_models = ["gpt-5.5"]
+
+    kwargs = {
+        "model": model,
+        "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
-        temperature=0.7,
-    )
+    }
+
+    if model not in no_temperature_models:
+        kwargs["temperature"] = 0.7
+
+    response = client.chat.completions.create(**kwargs)
     return response.choices[0].message.content
 
 
